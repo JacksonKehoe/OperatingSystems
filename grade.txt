@@ -1,6 +1,0 @@
-working code		0.5 /1.5 (segmentation fault on blank commands, ls always displays hidden files. debugging was left running. cd with two arguments works instead of throwing an error)
-documentation		3.5 /3.5 (make sure documentation is inside the lab folder next time)
-test			0 /3.5 (no test files)
-code quality		1 /1.5 
-
-total			5 /10
